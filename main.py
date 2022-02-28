@@ -87,7 +87,7 @@ while True:
 
     now = time.ticks_ms()
 
-    if motions.check_limit(step, sleep, direction, limit_switch):
+    if motions.check_limit(step, sleep, direction, mode2, limit_switch):
         # limit switch activated, rotation stopped
         status = 0
         count = 0
@@ -101,25 +101,25 @@ while True:
     if dswitch.pressed():
         # toggle direction
         if direction.value():
-            status = motions.direction(0, status, step, sleep, direction, limit_switch)
+            status = motions.direction(0, status, step, sleep, direction, mode2, limit_switch)
         else:
-            status = motions.direction(1, status, step, sleep, direction, limit_switch)
+            status = motions.direction(1, status, step, sleep, direction, mode2, limit_switch)
         # after any button pressed, set count to zero to ensure three flashes if motor set to slow
         count = 0
 
     if fastswitch.pressed():
         # set the motor at the fast turning rate
-        status = motions.fast(status, step, sleep, direction, limit_switch)
+        status = motions.fast(status, step, sleep, direction, mode2, limit_switch)
         count = 0
 
     if slowswitch.pressed():
         # set the motor at the slow turning rate
-        status = motions.slow(status, step, sleep, direction, limit_switch)
+        status = motions.slow(status, step, sleep, direction, mode2, limit_switch)
         count = 0
 
     if stopswitch.pressed():
         # stop the motor
-        status = motions.stop(status, step, sleep, direction, limit_switch)
+        status = motions.stop(status, step, sleep, direction, mode2, limit_switch)
         count = 0
 
 
