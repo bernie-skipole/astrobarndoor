@@ -24,6 +24,8 @@ limit_switch = Pin(0, Pin.IN, Pin.PULL_UP)
 
 # all modes 0 is full step
 # all modes 1 is 1/32 step
+# mode0 1, mode1 1, mode2 0 is 1/8 microstepping,
+# so to change from 1/32 to 1/8 just chang mode2
 
 mode0 = Pin(22, Pin.OUT)
 mode0.value(1)
@@ -32,7 +34,7 @@ mode1 = Pin(21, Pin.OUT)
 mode1.value(1)
 
 mode2 = Pin(20, Pin.OUT)
-mode2.value(1)
+mode2.value(1)  # 1/32 microstepping
 
 # reset 0 to reset, needs to be 1 to run
 reset = Pin(19, Pin.OUT)

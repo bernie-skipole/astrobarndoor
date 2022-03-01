@@ -12,7 +12,7 @@ def check_limit(step, sleep, direction, mode2, limit_switch):
         # direction is up, which is safe, no problem
         return False
     # Limit closed, and direction down, force stop
-    mode2.value(1)
+    mode2.value(1)  # 1/32 microstepping
     step.freq(12)
     sleep.value(0)
     return True
@@ -55,12 +55,13 @@ def slow(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
         return 1
     if not status:
         # system is asleep, set slow speed and awake
-        mode2.value(1)
+        mode2.value(1)  # 1/32 microstepping
         step.freq(12)
         # come out of sleep
         sleep.value(1)
         return 1
-    # status is 2, so freq must be fast (500), alter it to 400, 300, 200, 100, 50, 12
+    # status is 2, so freq must be fast (500 1/8 microstepping), alter it to 400, 300, 200, 100, 50
+    # then to 1/32 microstepping, frequency 12
     acc_t = 0.05   # each change in speed waits for 0.05 of a second
     step.freq(400)
     time.sleep(acc_t)
@@ -82,7 +83,7 @@ def slow(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
     time.sleep(acc_t)
     if check_limit(step, sleep, direction, mode2, limit_switch):
         return 0
-    mode2.value(1)
+    mode2.value(1)  # 1/32 microstepping
     step.freq(12)
     # so now running with a frequency of 12, return status 1
     return 1
@@ -118,7 +119,7 @@ def fast(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
         return 2
     if not status:
         # stopped, so wake it up, starting from slow
-        mode2.value(1)
+        mode2.value(1)  # 1/32 microstepping
         step.freq(12)
         # come out of sleep
         sleep.value(1)
@@ -127,7 +128,7 @@ def fast(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
             return 0
     # awake, and running slow, so accelerate
     acc_t = 0.05   # each change in speed waits for 0.05 of a second
-    mode2.value(0)
+    mode2.value(0) # 1/8th microstepping
     step.freq(50)
     time.sleep(acc_t)
     if check_limit(step, sleep, direction, mode2, limit_switch):
