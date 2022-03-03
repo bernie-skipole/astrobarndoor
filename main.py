@@ -46,7 +46,7 @@ sleep = Pin(18, Pin.OUT)
 sleep.value(0)
 
 step = PWM(Pin(17))
-step.freq(12)    # 12 for slow, 500 for fast
+step.freq(motions.SLOWFREQ)    # SLOWFREQ for slow speed which should produce sidereal rate
 step.duty_u16(32768)
 # 65536 is full on
 # 32768 is 50%

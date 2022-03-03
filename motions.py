@@ -1,6 +1,14 @@
 
 import time
 
+
+# SLOWFREQ can be changed here to set the motor microstepping
+# rate which should produce sidereal rate motion on the barn door
+# This will need calibrating, by measuring angle moved over a period of time
+
+SLOWFREQ = 12
+
+
 def check_limit(step, sleep, direction, mode2, limit_switch):
     "If limit switch tripped, return True, or return False if no limit"
     # limit switch gpio pin is pulled high, and is grounded when the switch is closed
@@ -13,7 +21,7 @@ def check_limit(step, sleep, direction, mode2, limit_switch):
         return False
     # Limit closed, and direction down, force stop
     mode2.value(1)  # 1/32 microstepping
-    step.freq(12)
+    step.freq(SLOWFREQ)
     sleep.value(0)
     return True
 
@@ -56,13 +64,13 @@ def slow(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
     if not status:
         # system is asleep, set slow speed and awake
         mode2.value(1)  # 1/32 microstepping
-        step.freq(12)
+        step.freq(SLOWFREQ)
         # come out of sleep
         sleep.value(1)
         return 1
     # status is 2, so freq must be fast (500 1/8 microstepping), alter it to 400, 300, 200, 100, 50
-    # then to 1/32 microstepping, frequency 12
-    acc_t = 0.05   # each change in speed waits for 0.05 of a second
+    # then to 1/32 microstepping, frequency SLOWFREQ
+    acc_t = 0.2   # each change in speed waits for 0.2 of a second
     step.freq(400)
     time.sleep(acc_t)
     if check_limit(step, sleep, direction, mode2, limit_switch):
@@ -84,8 +92,8 @@ def slow(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
     if check_limit(step, sleep, direction, mode2, limit_switch):
         return 0
     mode2.value(1)  # 1/32 microstepping
-    step.freq(12)
-    # so now running with a frequency of 12, return status 1
+    step.freq(SLOWFREQ)
+    # so now running with a frequency of SLOWFREQ, return status 1
     return 1
 
 
@@ -103,7 +111,6 @@ def stop(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
         return 0
     if slow(status, step, sleep, direction, mode2, limit_switch):
         # now running slow
-        time.sleep(0.2)
         sleep.value(0)
     return 0
 
@@ -120,14 +127,14 @@ def fast(status, step, sleep, direction, mode2, limit_switch):  # status = 0 for
     if not status:
         # stopped, so wake it up, starting from slow
         mode2.value(1)  # 1/32 microstepping
-        step.freq(12)
+        step.freq(SLOWFREQ)
         # come out of sleep
         sleep.value(1)
         time.sleep(0.2)
         if check_limit(step, sleep, direction, mode2, limit_switch):
             return 0
     # awake, and running slow, so accelerate
-    acc_t = 0.05   # each change in speed waits for 0.05 of a second
+    acc_t = 0.2   # each change in speed waits for 0.2 of a second
     mode2.value(0) # 1/8th microstepping
     step.freq(50)
     time.sleep(acc_t)
