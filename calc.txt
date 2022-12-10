@@ -26,9 +26,7 @@ microsteps per second = 0.000072921 / 0.00000625 = 11.66736 microsteps per secon
 So work on a pwm frequency of 12 steps per second
 
 
-
-
-calibration, time to move 20 degrees
+Calibration, Measure time to move 20 degrees.
 
 86164.0905 seconds = N * 360
 
@@ -38,6 +36,10 @@ T = 86164.0905 * 20/360  =  4786.893916667 seconds
 
 T =  79.781565278 minutes
 
-T  = 1 hour 19.78 seconds or simplify to 1 hour 20 seconds
+T  = 1 hour 19.78 minutes
 
+T = 1 hour 19 minutes 47 seconds
 
+or simplify:
+
+T = 1 hour 20 minutes
