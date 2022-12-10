@@ -24,3 +24,20 @@ Required angle change of barn door hinge = 2 pi / 86164.1  (sideral rate in seco
 microsteps per second = 0.000072921 / 0.00000625 = 11.66736 microsteps per second
 
 So work on a pwm frequency of 12 steps per second
+
+
+
+
+calibration, time to move 20 degrees
+
+86164.0905 seconds = N * 360
+
+86164.0905 * 20/360 = N * 20
+
+T = 86164.0905 * 20/360  =  4786.893916667 seconds
+
+T =  79.781565278 minutes
+
+T  = 1 hour 19.78 seconds or simplify to 1 hour 20 seconds
+
+
